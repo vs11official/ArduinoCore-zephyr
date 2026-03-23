@@ -339,14 +339,17 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	size_t idx = pwm_pin_index(pinNumber);
 
 	if (idx >= ARRAY_SIZE(arduino_pwm)) {
+		#ifdef CONFIG_GPIO
 		pinMode(pinNumber, OUTPUT);
 		digitalWrite(pinNumber, value > 127 ? HIGH : LOW);
+		#endif
 		return;
 	}
-
 	if (!pwm_is_ready_dt(&arduino_pwm[idx])) {
+		#ifdef CONFIG_GPIO
 		pinMode(pinNumber, OUTPUT);
 		digitalWrite(pinNumber, value > 127 ? HIGH : LOW);
+		#endif
 		return;
 	}
 
